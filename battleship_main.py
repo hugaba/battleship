@@ -71,6 +71,6 @@ while play_again:
         #asks the user to write a choice between Y and N
         choice = input("Do you want to play again? (Y/N)")
         # if choice is N, play_again becomes False and the main while is stopped
-        if choice == "N":
+        if choice.capitalize() == "N":
             print("Goodbye!")
             play_again = False
