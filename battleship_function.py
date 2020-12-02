@@ -23,7 +23,7 @@ def shoot(coordinates, coordinates_ships, enemy_grid):
     
     # check if user already hit spot
     if coordinates in already_asked_coordinates:
-        print("You already hit shoot here")
+        print("\nYou already hit shoot here\n")
         return enemy_grid, coordinates_ships
     
     # check if the shoot hit or miss target 
