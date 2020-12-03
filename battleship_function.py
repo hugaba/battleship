@@ -142,35 +142,35 @@ def draw_title():
 
 def draw_won():
     text = """
-    88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-    8                                                                                          8
-    8 Y88b     d88Y   d8888b    888    888         888             888    d8888b    88b    888 8
-    8  Y88b   d88Y   d88  88b   888    888         888             888   d88  88b   888b   888 8
-    8   Y88b d88Y   d88    88b  888    888         888             888  d88    88b  8888b  888 8
-    8    Y88888Y    888    888  888    888         888             888  888    888  888Y8b 888 8
-    8     Y888Y     888    888  888    888         888   d88888b   888  888    888  888 Y8b888 8
-    8      888      Y88    88Y  888    888         Y88b d88Y Y88b d88Y  Y88    88Y  888  Y8888 8
-    8      888       Y88  88Y    Y88  88Y           Y88888Y   Y88888Y    Y88  88Y   888   Y888 8
-    8      888        Y8888Y      Y8888Y             Y888Y     Y888Y      Y8888Y    888    Y88 8
-    8                                                                                          8
-    88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    8                                                                                       8
+    8 Y88b     d88Y   d8888b    888    888         888             888  8888888  88b    888 8
+    8  Y88b   d88Y   d88  88b   888    888         888             888    888    888b   888 8
+    8   Y88b d88Y   d88    88b  888    888         888             888    888    8888b  888 8
+    8    Y88888Y    888    888  888    888         888             888    888    888Y8b 888 8
+    8     Y888Y     888    888  888    888         888   d88888b   888    888    888 Y8b888 8
+    8      888      Y88    88Y  888    888         Y88b d88Y Y88b d88Y    888    888  Y8888 8
+    8      888       Y88  88Y    Y88  88Y           Y88888Y   Y88888Y     888    888   Y888 8
+    8      888        Y8888Y      Y8888Y             Y888Y     Y888Y    8888888  888    Y88 8
+    8                                                                                       8
+    88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
     """
     print(text)
 
 def draw_ia_won():
     text = """
-    888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-    8                                                                                  8
-    8 8888888            d8888             888             888    d8888b    88b    888 8
-    8   888             d88888             888             888   d88  88b   888b   888 8
-    8   888            d88P888             888             888  d88    88b  8888b  888 8
-    8   888           d88P 888             888             888  888    888  888Y8b 888 8
-    8   888          d88P  888             888   d88888b   888  888    888  888 Y8b888 8
-    8   888         d888888888             Y88b d88Y Y88b d88Y  Y88    88Y  888  Y8888 8
-    8   888   888  d88P    888 888          Y88888Y   Y88888Y    Y88  88Y   888   Y888 8
-    8 8888888 888 d88P     888 888           Y888Y     Y888Y      Y8888Y    888    Y88 8
-    8                                                                                  8
-    888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    8                                                                               8
+    8 8888888            d8888             888             888  8888888  88b    888 8
+    8   888             d88888             888             888    888    888b   888 8
+    8   888            d88P888             888             888    888    8888b  888 8
+    8   888           d88P 888             888             888    888    888Y8b 888 8
+    8   888          d88P  888             888   d88888b   888    888    888 Y8b888 8
+    8   888         d888888888             Y88b d88Y Y88b d88Y    888    888  Y8888 8
+    8   888   888  d88P    888 888          Y88888Y   Y88888Y     888    888   Y888 8
+    8 8888888 888 d88P     888 888           Y888Y     Y888Y    8888888  888    Y88 8
+    8                                                                               8
+    888888888888888888888888888888888888888888888888888888888888888888888888888888888
     """
     print(text)
 
@@ -289,12 +289,27 @@ def create_grid_different_lengths(list_enemy_boats = [5, 4, 3, 3, 2], size_grid 
     return list_coordinates, grid
 
 def enemy_shoot(your_ships_coordinates, your_grid):
+    """
+    Function that generates coordinates for IA and updates the grid after shooting
+    -------
+    your_ship_coordinates: tuple of int
+                           coordinates of all your remaining ships on the grid
+    your_grid : list of list of ints
+                grid with all informations
+    -------
+    Return the updated grid with the shoot of IA and the coordinates of the remaining ships
+    """
     already_asked_coordinates = [""]
+    # Takes the coordinates of missed and hit shoots
     already_asked_coordinates = get_coordinates(your_grid, 3) + get_coordinates(your_grid, 1)
+    # Randomly generates coordinates 
     coordinates = (random.randint(0, (len(your_grid) -1)), random.randint(0, (len(your_grid) -1)))
+
+    # If coordinates have already been asked, it generates new coordinates
     while coordinates in already_asked_coordinates:
         coordinates = (random.randint(0, (len(your_grid) -1)), random.randint(0, (len(your_grid) -1)))
     
+    # Check if ship has been hit and upgrade of the grid
     if coordinates in your_ships_coordinates:
         your_ships_coordinates.remove(coordinates)
         updated_grid = update_grid(your_grid, coordinates, 3)
