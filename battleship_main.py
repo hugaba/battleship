@@ -23,14 +23,17 @@ while play_again:
         grid_size = 4
         list_enemy_boats = [3, 2, 2]
         list_ally_boats = [3, 2, 2]
+        print("You have to find 1 ship of size 3 and 2 ship of size 2")
     elif level == "medium":
         grid_size = 10
         list_enemy_boats = [5, 4, 3, 3, 2]
         list_ally_boats = [5, 4, 3, 3, 2]
+        print("You have to find 1 ship of size 5, 1 ship of size 4, 2 ship of size 3 and 1 ship of size 2")
     elif level == "hard":
         grid_size = 10
         list_enemy_boats = [4, 3, 2]
         list_ally_boats = [4, 3, 2]
+        print("You have to find 1 ship of size 4, 1 ship of size 3 and 1 ship of size 2")
 
     # building of the grid with grid parameters filled with 0
     enemy_grid = np.zeros((grid_size, grid_size), dtype=np.int8)
