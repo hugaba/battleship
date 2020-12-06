@@ -40,8 +40,10 @@ while play_again:
     your_grid = np.zeros((grid_size, grid_size), dtype=np.int8)
     
     # positioning of ships on the grid
-    list_coordinates_enemy_ships, enemy_grid = create_grid_different_lengths(list_enemy_boats, size_grid = grid_size)
-    list_of_your_ships, your_grid = create_grid_different_lengths(list_ally_boats, size_grid = grid_size)
+    enemy_grid = create_grid_different_lengths(list_enemy_boats, size_grid = grid_size)
+    list_coordinates_enemy_ships = get_coordinates(enemy_grid, 2)
+    your_grid = create_grid_different_lengths(list_ally_boats, size_grid = grid_size)
+    list_of_your_ships = get_coordinates(your_grid, 2)
     
     # while there is still ships on the enemy grid or your grid
     while len(list_coordinates_enemy_ships) > 0 and len(list_of_your_ships) > 0:
