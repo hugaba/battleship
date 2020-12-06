@@ -2,7 +2,7 @@ import numpy as np
 import random
 import string
 
-def shoot(coordinates, coordinates_ships, enemy_grid):
+def shoot(coordinates, enemy_grid):
     """
     Function that check if the coordinates given by the player are matching a ship place. 
     
@@ -20,6 +20,9 @@ def shoot(coordinates, coordinates_ships, enemy_grid):
     already_asked_coordinates = [""]  
     # use of function get coordinates to had the tuple where the user already shoot 
     already_asked_coordinates = get_coordinates(enemy_grid, 3) + get_coordinates(enemy_grid,1)
+
+    # use of function get coordinates to had the tuple where the ships are
+    coordinates_ships = get_coordinates(enemy_grid, 2)
     
     # check if user already hit spot
     if coordinates in already_asked_coordinates:
@@ -28,14 +31,13 @@ def shoot(coordinates, coordinates_ships, enemy_grid):
     
     # check if the shoot hit or miss target 
     if coordinates in coordinates_ships:
-        coordinates_ships.remove(coordinates)
         updated_grid = update_grid(enemy_grid, coordinates, 3)
         print("\nyou hit I.A.\n")
     else:        
         updated_grid = update_grid(enemy_grid, coordinates, 1)
         print("\nyou missed I.A.\n")
         
-    return updated_grid, coordinates_ships
+    return updated_grid
 
 def get_coordinates(grid, value):
     """
@@ -49,7 +51,7 @@ def get_coordinates(grid, value):
     -------
     return the coordinates where the is the given value
     """
-    coordinates_ships = []
+    coordinates = []
     
     # loop over each row
     for i in range(0, len(grid)):
@@ -57,8 +59,8 @@ def get_coordinates(grid, value):
         for j in range(0, len(grid[i])):
             # check if the value of the cell is equal to the value
             if grid[i][j] == value:
-                coordinates_ships.append((i, j))
-    return coordinates_ships
+                coordinates.append((i, j))
+    return coordinates
 
 def ask_coordinates(enemy_grid):
     """
@@ -288,7 +290,7 @@ def create_grid_different_lengths(list_enemy_boats = [5, 4, 3, 3, 2], size_grid 
         
     return list_coordinates, grid
 
-def enemy_shoot(your_ships_coordinates, your_grid):
+def enemy_shoot(your_grid):
     """
     Function that generates coordinates for IA and updates the grid after shooting
     -------
@@ -299,70 +301,57 @@ def enemy_shoot(your_ships_coordinates, your_grid):
     -------
     Return the updated grid with the shoot of IA and the coordinates of the remaining ships
     """
-    already_asked_coordinates = [""]
+    already_asked_coordinates = []
     # Takes the coordinates of missed and hit shoots
     already_asked_coordinates = get_coordinates(your_grid, 3) + get_coordinates(your_grid, 1)
-    # Randomly generates coordinates 
-    coordinates = (random.randint(0, (len(your_grid) -1)), random.randint(0, (len(your_grid) -1)))
+    # Use of function get_coordinates to have the coordinates of your ships
+    your_ships_coordinates = get_coordinates(your_grid, 2)
+    
+    # list for higher probability targets in order to target next to already hit ships
+    higher_probability_targets = []
+    already_hit_ships = get_coordinates(your_grid, 3)
+    for coordinates in already_hit_ships:
+        higher_probability_targets.append(((coordinates[0]-1), coordinates[1]))
+        higher_probability_targets.append(((coordinates[0]+1), coordinates[1]))
+        higher_probability_targets.append((coordinates[0], (coordinates[1]+1)))
+        higher_probability_targets.append((coordinates[0], (coordinates[1]-1)))
+
+
+    if len(higher_probability_targets) > 0:
+        for coordinates2 in higher_probability_targets:
+            if coordinates2[0] < 0 or coordinates2[0] > (len(your_grid) -1) or coordinates2[1] < 0 or coordinates2[1] > (len(your_grid)-1) :
+                higher_probability_targets.remove(coordinates2)
+            elif coordinates2 in already_asked_coordinates:
+                higher_probability_targets.remove(coordinates2)
+    
+    print(higher_probability_targets)
+    
+    prob = random.random()
+    print(prob)
+
+    if prob > 0.4 and len(higher_probability_targets) > 0:
+        # Choice between higher probability targets
+        coordinates = random.choice(higher_probability_targets)
+        print("ok")
+    else:
+        # Randomly generates coordinates 
+        coordinates = (random.randint(0, (len(your_grid) -1)), random.randint(0, (len(your_grid) -1)))
+        print("not ok")
 
     # If coordinates have already been asked, it generates new coordinates
     while coordinates in already_asked_coordinates:
         coordinates = (random.randint(0, (len(your_grid) -1)), random.randint(0, (len(your_grid) -1)))
     
+    print(coordinates)
+    
     # Check if ship has been hit and upgrade of the grid
     if coordinates in your_ships_coordinates:
-        your_ships_coordinates.remove(coordinates)
         updated_grid = update_grid(your_grid, coordinates, 3)
         print("IA hit you\n")
     else:
         updated_grid = update_grid(your_grid, coordinates, 1)
         print("IA missed you\n")
         
-    return updated_grid, your_ships_coordinates
+    return updated_grid
 
 def display_grid(grid, player, player_name):  #fonction de mise en forme du plateau
-
-    #coordinates_enemy = np.array((1, 0, 0, 1, 3, 0, 3, 0, 3, 2, 1, 0, 0, 0, 2, 0, 3, 0, 0, 2, 2, 0, 1, 1, 0))  #données de coordonnées a convertir
-    #coordinates_enemy = coordinates_enemy.reshape(5, 5)
-    list_coordinate = []
-    list_collumns = []
-    #player = True
-    collumns_number = []
-    increment = 0
-    row_letters = []
-
-    print("\n \n")
-
-    for axis_x in grid:
-        list_collumns.append("------")
-        collumns_number.append(f"|  {1+increment}  ")
-        row_letters.append(1+increment)
-        increment += 1
-        for data_d in axis_x:
-            if data_d == 0:
-                list_coordinate.append("|  \033[34m~\033[0m  ")
-            elif data_d == 1:
-                list_coordinate.append("|  \033[34mo\033[0m  ")
-            elif data_d == 2 and player == True:
-                list_coordinate.append("|  \033[33mB\033[0m  ")
-            elif data_d == 2 and player == False:
-                list_coordinate.append("|  \033[34m~\033[0m  ")
-            elif data_d == 3:
-                list_coordinate.append("|  \033[31mX\033[0m  ")
-
-    #mise en forme
-    #player_name = "Joe"
-    print(''.join(collumns_number) + "|")
-    start = 0
-    increment_2 = 0
-    row_letters_string = []
-    for number in row_letters:
-        row_letters_string.append(str(number))
-    for data_d in axis_x:
-        line_index = chr(row_letters[0+increment_2]+96)
-        line_index = line_index.upper
-        print(''.join(list_collumns) + "-" + "\n" + ''.join(list_coordinate[start:(start+len(grid))]) + "|" + f"  {(chr(row_letters[0+increment_2]+96)).upper()}")
-        start += len(grid)
-        increment_2 += 1
-    print(''.join(list_collumns) + "-")
-    print(player_name)
