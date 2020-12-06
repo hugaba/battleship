@@ -4,7 +4,7 @@
 import numpy as np
 import random
 import string
-from battleship_functionV2 import *
+from battleship_function import *
 
 play_again = True
 
