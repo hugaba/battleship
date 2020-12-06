@@ -321,25 +321,18 @@ def enemy_shoot(your_grid):
             elif coordinates2 in already_asked_coordinates:
                 higher_probability_targets.remove(coordinates2)
     
-    print(higher_probability_targets)
-    
     prob = random.random()
-    print(prob)
-
+ 
     if prob > 0.4 and len(higher_probability_targets) > 0:
         # Choice between higher probability targets
         coordinates = random.choice(higher_probability_targets)
-        print("ok")
     else:
         # Randomly generates coordinates 
         coordinates = (random.randint(0, (len(your_grid) -1)), random.randint(0, (len(your_grid) -1)))
-        print("not ok")
 
     # If coordinates have already been asked, it generates new coordinates
     while coordinates in already_asked_coordinates:
         coordinates = (random.randint(0, (len(your_grid) -1)), random.randint(0, (len(your_grid) -1)))
-    
-    print(coordinates)
     
     # Check if ship has been hit and upgrade of the grid
     if coordinates in your_ships_coordinates:
