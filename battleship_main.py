@@ -4,7 +4,7 @@
 import numpy as np
 import random
 import string
-from battleship_function import *
+from battleship_functionV2 import *
 
 play_again = True
 
@@ -56,10 +56,12 @@ while play_again:
 
         # asks the user for coordinates to shoot
         coordinates = ask_coordinates(enemy_grid)
-        enemy_grid, list_coordinates_enemy_ships = shoot(coordinates, list_coordinates_enemy_ships, enemy_grid)
-        
+        print("\n----------------------------------------------------------------------------------")
+        enemy_grid = shoot(coordinates, enemy_grid)
+        list_coordinates_enemy_ships = get_coordinates(enemy_grid, 2)
         #opponent turn
-        your_grid, list_of_your_ships = enemy_shoot(list_of_your_ships, your_grid)
+        your_grid = enemy_shoot(your_grid)
+        list_of_your_ships = get_coordinates(your_grid, 2)
     
     # checking who won
     if len(list_coordinates_enemy_ships) < 1:
