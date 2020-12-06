@@ -285,10 +285,7 @@ def create_grid_different_lengths(list_enemy_boats = [5, 4, 3, 3, 2], size_grid 
         if len(list_boats_to_place) == 0:
             ok_grid = True
         
-    # on initialise la liste des coordonnées des bateaux :
-    list_coordinates = get_coordinates(grid, 2)
-        
-    return list_coordinates, grid
+    return grid
 
 def enemy_shoot(your_grid):
     """
@@ -355,3 +352,48 @@ def enemy_shoot(your_grid):
     return updated_grid
 
 def display_grid(grid, player, player_name):  #fonction de mise en forme du plateau
+
+    #coordinates_enemy = np.array((1, 0, 0, 1, 3, 0, 3, 0, 3, 2, 1, 0, 0, 0, 2, 0, 3, 0, 0, 2, 2, 0, 1, 1, 0))  #données de coordonnées a convertir
+    #coordinates_enemy = coordinates_enemy.reshape(5, 5)
+    list_coordinate = []
+    list_collumns = []
+    #player = True
+    collumns_number = []
+    increment = 0
+    row_letters = []
+
+    print("\n \n")
+
+    for axis_x in grid:
+        list_collumns.append("------")
+        collumns_number.append(f"|  {1+increment}  ")
+        row_letters.append(1+increment)
+        increment += 1
+        for data_d in axis_x:
+            if data_d == 0:
+                list_coordinate.append("|  \033[34m~\033[0m  ")
+            elif data_d == 1:
+                list_coordinate.append("|  \033[34mo\033[0m  ")
+            elif data_d == 2 and player == True:
+                list_coordinate.append("|  \033[33mB\033[0m  ")
+            elif data_d == 2 and player == False:
+                list_coordinate.append("|  \033[34m~\033[0m  ")
+            elif data_d == 3:
+                list_coordinate.append("|  \033[31mX\033[0m  ")
+
+    #mise en forme
+    #player_name = "Joe"
+    print(''.join(collumns_number) + "|")
+    start = 0
+    increment_2 = 0
+    row_letters_string = []
+    for number in row_letters:
+        row_letters_string.append(str(number))
+    for data_d in axis_x:
+        line_index = chr(row_letters[0+increment_2]+96)
+        line_index = line_index.upper
+        print(''.join(list_collumns) + "-" + "\n" + ''.join(list_coordinate[start:(start+len(grid))]) + "|" + f"  {(chr(row_letters[0+increment_2]+96)).upper()}")
+        start += len(grid)
+        increment_2 += 1
+    print(''.join(list_collumns) + "-")
+    print(player_name)
